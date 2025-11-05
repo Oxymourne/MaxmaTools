@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QApplication
 
-from windows import OrdersMainWindow
+from windows import *
 import sys
 
 

@@ -1,7 +1,8 @@
-from PyQt6.QtGui import QPixmap, QFont
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QLabel, QGridLayout, QPushButton, QFileDialog, QMessageBox
+from PyQt6.QtGui import QPixmap, QFont, QTextBlock
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel, QGridLayout, QPushButton, QFileDialog,
+                             QMessageBox, QTextEdit)
 from PyQt6.QtCore import Qt
-from styles import labels_style, buttons_style
+from styles import labels_style, buttons_style, textedit_blocks_style
 
 
 # Функция для получения размеров экрана
@@ -135,39 +136,60 @@ class OOFileCheckMW(QMainWindow):
         layout = QGridLayout(central_widget)  # Устанавливаем макет-сетку и привязываем к central_widget
         self.setStyleSheet("background-color: #ffffff;")  # Задаем цвет background'а
 
+
         banner = QLabel()  # Создаем экземпляр класса QLabel() под баннер
         pixmap = QPixmap('images (1).jpg')  # Делаем ссылку на изображение
         banner.setPixmap(
             pixmap.scaledToWidth(400, Qt.TransformationMode.SmoothTransformation))  # Масштабируем по ширине
         banner.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Выравнивание по центру
+        banner.setFixedHeight(150)
         layout.addWidget(banner, 1, 2, 1, 1)  # Размещаем баннер в нашем layout по координатам
 
         window_width, window_height = window_sizes()
 
+
         self.resize(window_width, window_height)  # Устанавливаем размеры окна
 
-        # Создаем кнопку Возврата в главное меню
-        button_back = QPushButton('Вернуться в меню') # Создаем экземпляр кнопки
-        button_back.setStyleSheet(buttons_style) # Задаем стиль кнопки
-        button_back.setMinimumSize(250, 40) # Задаем минимальный размер кнопки
-        button_back.setMaximumSize(250, 80) # Задаем максимальный размер кнопки
-        layout.addWidget(button_back, 4, 1, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter) # Задаем положение в сетке
-        button_back.clicked.connect(self.back_to_main_menu) # Сигнал при нажатии кнопки
-
-        # Создаем заголовок поля пут
+        # Создаем заголовок поля пути
         label_file_path = QLabel('Путь выбранного файла', central_widget)
-        label_file_path.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Тут выровняли лейбл по центру
+        label_file_path.setAlignment(Qt.AlignmentFlag.AlignLeft)  # Тут выровняли лейбл по центру
         label_file_path.setStyleSheet(labels_style)  # Присваиваем заголовку стили
-        layout.addWidget(label_file_path, 2, 1, 2, 1)
+        label_file_path.setFixedHeight(40)
+        layout.addWidget(label_file_path, 2, 1, 2, 1) # Размещаем в сетке
+
+        # Создаем строку для отображения пути
+        file_path = None # Присваиваем значение None. Если файл загружен, тут будет путь отображаться
+        label_file_path.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        path_text_block = QTextEdit() # Создаем экземпляр текстового блока
+        path_text_block.setReadOnly(True) # Ставим режим только чтения
+        path_text_block.setStyleSheet(textedit_blocks_style)
+        path_text_block.setFixedHeight(40)
+        layout.addWidget(path_text_block, 3, 1, 1, 1)
+
 
         # Создаем кнопку для загрузки файла
         button_upload = QPushButton('Загрузить файл')
         button_upload.setStyleSheet(buttons_style)
         button_upload.setMinimumSize(250, 40)  # Задаем минимальный размер кнопки
         button_upload.setMaximumSize(250, 80)  # Задаем максимальный размер кнопки
-        layout.addWidget(button_upload, 3, 1, 1, 1, alignment=Qt.AlignmentFlag.AlignCenter)  # Задаем положение в сетке
+        layout.addWidget(button_upload, 8, 1, 1, 1)  # Задаем положение в сетке
         button_upload.clicked.connect(self.select_file_qt)
 
+        # Создаем кнопку Возврата в главное меню
+        button_back = QPushButton('Вернуться в меню')  # Создаем экземпляр кнопки
+        button_back.setStyleSheet(buttons_style)  # Задаем стиль кнопки
+        button_back.setMinimumSize(250, 40)  # Задаем минимальный размер кнопки
+        button_back.setMaximumSize(250, 80)  # Задаем максимальный размер кнопки
+        layout.addWidget(button_back, 9, 1, 1, 1)  # Задаем положение в сетке
+        button_back.clicked.connect(self.back_to_main_menu)  # Сигнал при нажатии кнопки
+
+        # Создаем кнопку для обработки файла
+        button_check = QPushButton('Проверить файл')
+        button_check.setStyleSheet(buttons_style)
+        button_check.setMinimumSize(250, 40)  # Задаем минимальный размер кнопки
+        button_check.setMaximumSize(250, 80)  # Задаем максимальный размер кнопки
+        layout.addWidget(button_check, 9, 3, 1, 1)  # Задаем положение в сетке
+        button_check.clicked.connect(self.select_file_qt)
 
 
     def back_to_main_menu(self):
@@ -183,6 +205,7 @@ class OOFileCheckMW(QMainWindow):
             "",  # начальная директория (пусто — домашняя папка)
             "Таблицы (*.xlsx)"  # фильтры
         )
+
 
 
 

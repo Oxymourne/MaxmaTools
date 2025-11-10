@@ -2,7 +2,6 @@ labels_style = """
         color: #2E3A59;
         font-size: 20px;
         font-weight: bold;
-        margin: 10px;
     """
 
 buttons_style = """
@@ -19,6 +18,15 @@ buttons_style = """
 
              QPushButton:pressed {
                 background-color: #4338CA;
+             }
+         """
+
+buttons_style_inactive = """
+             QPushButton {
+                color: #000000;
+                border: 2px solid #000000;
+                border-color: #000000;
+                border-radius: 6px;
              }
          """
 
